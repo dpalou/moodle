@@ -67,7 +67,7 @@ if ($hassiteconfig) {
 
         $temp->add(new admin_setting_configtext('tool_mobile/minimumversion',
                     new lang_string('minimumversion_key', 'tool_mobile'),
-                    new lang_string('minimumversion', 'tool_mobile'), '', PARAM_NOTAGS));
+                    new lang_string('minimumversion', 'tool_mobile'), '3.8.0', PARAM_NOTAGS));
 
         $ADMIN->add('mobileapp', $temp);
 
