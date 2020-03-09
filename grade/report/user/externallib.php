@@ -507,7 +507,7 @@ class gradereport_user_external extends external_api {
                                         'gradeformatted' => new external_value(PARAM_NOTAGS, 'The grade formatted', VALUE_OPTIONAL),
                                         'grademin' => new external_value(PARAM_FLOAT, 'Grade min', VALUE_OPTIONAL),
                                         'grademax' => new external_value(PARAM_FLOAT, 'Grade max', VALUE_OPTIONAL),
-                                        'rangeformatted' => new external_value(PARAM_NOTAGS, 'Range formatted', VALUE_OPTIONAL),
+                                        'rangeformatted' => new external_value(PARAM_RAW, 'Range formatted', VALUE_OPTIONAL),
                                         'percentageformatted' => new external_value(PARAM_NOTAGS, 'Percentage', VALUE_OPTIONAL),
                                         'lettergradeformatted' => new external_value(PARAM_NOTAGS, 'Letter grade', VALUE_OPTIONAL),
                                         'rank' => new external_value(PARAM_INT, 'Rank in the course', VALUE_OPTIONAL),
