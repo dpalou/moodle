@@ -15,30 +15,17 @@ Feature: In a lesson activity, if custom scoring is not enabled, student should 
       | teacher1 | C1 | editingteacher |
       | student1 | C1 | student |
     And the following "activities" exist:
-      | activity | course | name             | custom |
-      | lesson   | C1     | Test lesson name | 0      |
-    And I am on the "Test lesson name" "lesson activity" page logged in as teacher1
-    And I follow "Add a content page"
-    And I set the following fields to these values:
-      | Page title | First page name |
-      | Page contents | First page contents |
-      | id_answer_editor_0 | Next page |
-      | id_jumpto_0 | Next page |
-    And I press "Save page"
-    And I select "Add a question page" from the "qtype" singleselect
-    And I set the field "Select a question type" to "Numerical"
-    And I press "Add a question page"
-    And I set the following fields to these values:
-      | Page title | Hardest question ever |
-      | Page contents | 1 + 1? |
-      | id_answer_editor_0 | 2 |
-      | id_response_editor_0 | Correct answer |
-      | id_jumpto_0 | Next page |
-      | id_answer_editor_1 | 1 |
-      | id_response_editor_1 | Incorrect answer |
-      | id_jumpto_1 | This page |
-    And I press "Save page"
-    And I log out
+      | activity   | name             | course | idnumber  | custom |
+      | lesson     | Test lesson name | C1     | lesson1   | 0      |
+    And the following "mod_lesson > pages" exist:
+      | lesson           | qtype   | title                 | content             |
+      | Test lesson name | content | First page name       | First page contents |
+      | Test lesson name | numeric | Hardest question ever | 1 + 1?              |
+    And the following "mod_lesson > answer" exist:
+      | page                  | answer    | response         | jumpto    | score |
+      | First page name       | Next page |                  | Next page | 0     |
+      | Hardest question ever | 2         | Correct answer   | Next page | 1     |
+      | Hardest question ever | 1         | Incorrect answer | This page | 0     |
     When I am on the "Test lesson name" "lesson activity" page logged in as student1
     Then I should see "First page contents"
     And I press "Next page"
