@@ -21,7 +21,7 @@ Feature: In a lesson activity, if custom scoring is not enabled, student should 
       | lesson           | qtype   | title                 | content             |
       | Test lesson name | content | First page name       | First page contents |
       | Test lesson name | numeric | Hardest question ever | 1 + 1?              |
-    And the following "mod_lesson > answer" exist:
+    And the following "mod_lesson > answers" exist:
       | page                  | answer    | response         | jumpto    | score |
       | First page name       | Next page |                  | Next page | 0     |
       | Hardest question ever | 2         | Correct answer   | Next page | 1     |
