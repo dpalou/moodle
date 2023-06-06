@@ -222,6 +222,134 @@ class mod_lesson_generator_testcase extends advanced_testcase {
     }
 
     /**
+     * This tests the cluster page generator.
+     *
+     * @covers ::create_cluster
+     */
+    public function test_create_cluster() {
+        global $DB;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+
+        $course = $this->getDataGenerator()->create_course();
+        $lesson = $this->getDataGenerator()->create_module('lesson', array('course' => $course));
+        $lessongenerator = $this->getDataGenerator()->get_plugin_generator('mod_lesson');
+
+        $cluster1 = $lessongenerator->create_cluster($lesson);
+        $cluster2 = $lessongenerator->create_cluster($lesson, [
+            'title' => 'Custom title',
+            'contents_editor' => [
+                'text' => 'Custom content',
+                'format' => FORMAT_MOODLE,
+                'itemid' => 0,
+            ],
+            'jumpto' => [LESSON_EOL],
+        ]);
+
+        $records = $DB->get_records('lesson_pages', ['lessonid' => $lesson->id], 'id');
+        $c1answers = $DB->get_records('lesson_answers', ['lessonid' => $lesson->id, 'pageid' => $cluster1->id], 'id');
+        $c2answers = $DB->get_records('lesson_answers', ['lessonid' => $lesson->id, 'pageid' => $cluster2->id], 'id');
+
+        $this->assertCount(2, $records);
+        $this->assertEquals($cluster1->id, $records[$cluster1->id]->id);
+        $this->assertEquals(LESSON_PAGE_CLUSTER, $records[$cluster1->id]->qtype);
+        $this->assertEquals($cluster2->id, $records[$cluster2->id]->id);
+        $this->assertEquals(LESSON_PAGE_CLUSTER, $records[$cluster2->id]->qtype);
+        $this->assertEquals($cluster2->title, $records[$cluster2->id]->title);
+        $this->assertEquals('Custom content', $records[$cluster2->id]->contents);
+        $this->assertCount(1, $c1answers);
+        $this->assertCount(1, $c2answers);
+        $this->assertEquals(LESSON_THISPAGE, array_pop($c1answers)->jumpto);
+        $this->assertEquals(LESSON_EOL, array_pop($c2answers)->jumpto);
+    }
+
+    /**
+     * This tests the endofcluster page generator.
+     *
+     * @covers ::create_endofcluster
+     */
+    public function test_create_endofcluster() {
+        global $DB;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+
+        $course = $this->getDataGenerator()->create_course();
+        $lesson = $this->getDataGenerator()->create_module('lesson', array('course' => $course));
+        $lessongenerator = $this->getDataGenerator()->get_plugin_generator('mod_lesson');
+
+        $endofcluster1 = $lessongenerator->create_endofcluster($lesson);
+        $endofcluster2 = $lessongenerator->create_endofcluster($lesson, [
+            'title' => 'Custom title',
+            'contents_editor' => [
+                'text' => 'Custom content',
+                'format' => FORMAT_MOODLE,
+                'itemid' => 0,
+            ],
+            'jumpto' => [LESSON_EOL],
+        ]);
+
+        $records = $DB->get_records('lesson_pages', ['lessonid' => $lesson->id], 'id');
+        $eoc1answers = $DB->get_records('lesson_answers', ['lessonid' => $lesson->id, 'pageid' => $endofcluster1->id], 'id');
+        $eoc2answers = $DB->get_records('lesson_answers', ['lessonid' => $lesson->id, 'pageid' => $endofcluster2->id], 'id');
+
+        $this->assertCount(2, $records);
+        $this->assertEquals($endofcluster1->id, $records[$endofcluster1->id]->id);
+        $this->assertEquals(LESSON_PAGE_ENDOFCLUSTER, $records[$endofcluster1->id]->qtype);
+        $this->assertEquals($endofcluster2->id, $records[$endofcluster2->id]->id);
+        $this->assertEquals(LESSON_PAGE_ENDOFCLUSTER, $records[$endofcluster2->id]->qtype);
+        $this->assertEquals($endofcluster2->title, $records[$endofcluster2->id]->title);
+        $this->assertEquals('Custom content', $records[$endofcluster2->id]->contents);
+        $this->assertCount(1, $eoc1answers);
+        $this->assertCount(1, $eoc2answers);
+        $this->assertEquals(LESSON_THISPAGE, array_pop($eoc1answers)->jumpto);
+        $this->assertEquals(LESSON_EOL, array_pop($eoc2answers)->jumpto);
+    }
+
+
+
+    /**
+     * This tests the endofbranch page generator.
+     *
+     * @covers ::create_endofbranch
+     */
+    public function test_create_endofbranch() {
+        global $DB;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+
+        $course = $this->getDataGenerator()->create_course();
+        $lesson = $this->getDataGenerator()->create_module('lesson', array('course' => $course));
+        $lessongenerator = $this->getDataGenerator()->get_plugin_generator('mod_lesson');
+
+        $endofbranch1 = $lessongenerator->create_endofbranch($lesson);
+        $endofbranch2 = $lessongenerator->create_endofbranch($lesson, [
+            'title' => 'Custom title',
+            'contents_editor' => [
+                'text' => 'Custom content',
+                'format' => FORMAT_MOODLE,
+                'itemid' => 0,
+            ],
+            'jumpto' => [LESSON_EOL],
+        ]);
+
+        $records = $DB->get_records('lesson_pages', ['lessonid' => $lesson->id], 'id');
+        $eob1answers = $DB->get_records('lesson_answers', ['lessonid' => $lesson->id, 'pageid' => $endofbranch1->id], 'id');
+        $eob2answers = $DB->get_records('lesson_answers', ['lessonid' => $lesson->id, 'pageid' => $endofbranch2->id], 'id');
+
+        $this->assertCount(2, $records);
+        $this->assertEquals($endofbranch1->id, $records[$endofbranch1->id]->id);
+        $this->assertEquals(LESSON_PAGE_ENDOFBRANCH, $records[$endofbranch1->id]->qtype);
+        $this->assertEquals($endofbranch2->id, $records[$endofbranch2->id]->id);
+        $this->assertEquals(LESSON_PAGE_ENDOFBRANCH, $records[$endofbranch2->id]->qtype);
+        $this->assertEquals($endofbranch2->title, $records[$endofbranch2->id]->title);
+        $this->assertEquals('Custom content', $records[$endofbranch2->id]->contents);
+        $this->assertCount(1, $eob1answers);
+        $this->assertCount(1, $eob2answers);
+        $this->assertEquals(LESSON_THISPAGE, array_pop($eob1answers)->jumpto);
+        $this->assertEquals(LESSON_EOL, array_pop($eob2answers)->jumpto);
+    }
+
+    /**
      * Test create some pages and their answers.
      *
      * @covers ::create_page
