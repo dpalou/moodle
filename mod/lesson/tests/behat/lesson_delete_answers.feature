@@ -31,8 +31,8 @@ branch table contents
       | Hardest question ever | 2             | Correct answer   | End of lesson   | 1     |
       | Hardest question ever | 1             | Incorrect answer | First page name | 0     |
     And I am on the "Test lesson name" "lesson activity" page logged in as teacher1
-    And I press "Edit lesson"
-    And I follow "Expanded"
+    And I follow "Edit Test lesson name"
+    And I click on "Expanded" "link" in the "region-main" "region"
 
   Scenario: Edit lesson content page
     Given I click on "//th[normalize-space(.)='First page name']/descendant::a[3]" "xpath_element"
