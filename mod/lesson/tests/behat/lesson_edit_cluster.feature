@@ -40,8 +40,8 @@ Feature: In a lesson activity, teacher can edit a cluster page
 
   Scenario: Edit lesson cluster page
     Given I am on the "Lesson with cluster" "lesson activity" page logged in as teacher1
-    And I press "Edit lesson"
-    And I select edit type "Expanded"
+    And I follow "Edit Lesson with cluster"
+    And I click on "Expanded" "link" in the "region-main" "region"
     And I click on "//th[normalize-space(.)='Cluster']/descendant::a[3]" "xpath_element"
     When I set the following fields to these values:
       | Page title | Modified name |
