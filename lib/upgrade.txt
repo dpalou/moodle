@@ -1,6 +1,9 @@
 This files describes API changes in core libraries and APIs,
 information provided here is intended especially for developers.
 
+===3.9.24===
+* Behat generators can now implement the function finish_generate_ to detect when the whole list of elements have been generated.
+
 ===3.9.22===
 * Added a new parameter in address_in_subnet to give us the ability to check for 0.0.0.0 or not.
 
