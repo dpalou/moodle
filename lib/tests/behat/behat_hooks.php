@@ -619,6 +619,7 @@ EOF;
         if ($isfailed && !empty($CFG->behat_faildump_path)) {
             // Save the page content (html).
             $this->take_contentdump($scope);
+            $this->take_consoledump($scope);
 
             if ($this->running_javascript()) {
                 // Save a screenshot.
@@ -657,6 +658,38 @@ EOF;
         } catch (Exception $e) {
             self::$currentstepexception = $e;
         }
+    }
+
+    /**
+     * Take a dump of the browser console content when a step fails.
+     *
+     * @throws Exception
+     * @param AfterStepScope $scope scope passed by event after step.
+     */
+    protected function take_consoledump(AfterStepScope $scope) {
+        $content = "";
+
+        try {
+            // Driver may throw an exception.
+            $logs = $this->getSession()->getDriver()->getWebDriver()->manage()->getLog('browser');
+
+            foreach ($logs as $log) {
+                $time = date('H:i:s', $log['timestamp']);
+                $level = $log['level'];
+                $message = $log['message'];
+                $content .= "$time - [$level] $message\n";
+            }
+        } catch (Exception $e) {
+            // Catching all exceptions as we don't know what the driver might throw.
+            $content = "Could not save consoledump due to an error\n" . $e->getMessage();
+        }
+
+        if (empty($content)) {
+            return;
+        }
+
+        list ($dir, $filename) = $this->get_faildump_filename($scope, 'log');
+        file_put_contents($dir . DIRECTORY_SEPARATOR . $filename, $content);
     }
 
     /**
