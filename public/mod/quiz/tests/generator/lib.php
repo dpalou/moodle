@@ -104,7 +104,66 @@ class mod_quiz_generator extends testing_module_generator {
             $record->gradepass = unformat_float($record->gradepass);
         }
 
-        return parent::create_instance($record, (array)$options);
+        $overallfeedback = $record->overallfeedback ?? null;
+        unset($record->overallfeedback);
+
+        $instance = parent::create_instance($record, (array)$options);
+
+        if (!empty($overallfeedback)) {
+            $this->create_overall_feedback($instance->id, $instance->grade, $overallfeedback);
+        }
+
+        return $instance;
+    }
+
+    /**
+     * Creates overall feedback entries for the quiz.
+     *
+     * @param int $quizid Quiz id.
+     * @param float $quizgrade Quiz maximum grade.
+     * @param array $overallfeedback Feedback entries.
+     */
+    protected function create_overall_feedback(int $quizid, float $quizgrade, array $overallfeedback): void {
+        global $DB;
+
+        foreach ($overallfeedback as $feedbackrow) {
+            $feedbackrow = (array)$feedbackrow;
+
+            $feedback = (object) [
+                'quizid' => $quizid,
+                'mingrade' => $this->convert_overall_feedback_grade($feedbackrow['mingrade'] ?? 0, $quizgrade),
+                'maxgrade' => $this->convert_overall_feedback_grade($feedbackrow['maxgrade'] ?? $quizgrade + 1, $quizgrade),
+                'feedbacktext' => $feedbackrow['feedbacktext'] ?? '',
+                'feedbacktextformat' => $feedbackrow['feedbacktextformat'] ?? FORMAT_HTML,
+            ];
+
+            $DB->insert_record('quiz_feedback', $feedback);
+        }
+    }
+
+    /**
+     * Converts a feedback grade boundary from number or percentage to grade points.
+     *
+     * @param mixed $grade Grade boundary value.
+     * @param float $quizgrade Quiz maximum grade.
+     * @return float
+     */
+    protected function convert_overall_feedback_grade($grade, float $quizgrade): float {
+        if (is_string($grade)) {
+            $grade = trim($grade);
+            if (str_ends_with($grade, '%')) {
+                $grade = substr($grade, 0, -1);
+                if (is_numeric($grade)) {
+                    return (float) $grade * $quizgrade / 100.0;
+                }
+            }
+        }
+
+        if (is_numeric($grade)) {
+            return (float) $grade;
+        }
+
+        throw new coding_exception('Invalid grade boundary in overallfeedback option.');
     }
 
     /**
