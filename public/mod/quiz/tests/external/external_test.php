@@ -765,7 +765,7 @@ final class external_test extends \core_external\tests\externallib_testcase {
             'rightansweropen' => 0,
             'rightanswerclosed' => 0,
         ];
-        $overallfeedback = [
+        $overallfeedbacks = [
             [
                 'mingrade' => '0',
                 'maxgrade' => '30%',
@@ -793,7 +793,7 @@ final class external_test extends \core_external\tests\externallib_testcase {
             false,
             [
                 ...$reviewoptions,
-                'overallfeedback' => $overallfeedback,
+                'overallfeedbacks' => $overallfeedbacks,
             ]
         );
 
@@ -850,7 +850,7 @@ final class external_test extends \core_external\tests\externallib_testcase {
                 'overallfeedbackimmediately' => 0,
                 'overallfeedbackopen' => 0,
                 'overallfeedbackclosed' => 0,
-                'overallfeedback' => $overallfeedback,
+                'overallfeedbacks' => $overallfeedbacks,
             ]
         );
 
