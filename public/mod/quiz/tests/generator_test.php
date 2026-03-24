@@ -152,7 +152,7 @@ final class generator_test extends \advanced_testcase {
             [
                 'course' => $course->id,
                 'grade' => 200,
-                'overallfeedback' => [
+                'overallfeedbacks' => [
                     [
                         'mingrade' => '0',
                         'maxgrade' => '50%',

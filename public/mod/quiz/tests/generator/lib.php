@@ -104,29 +104,33 @@ class mod_quiz_generator extends testing_module_generator {
             $record->gradepass = unformat_float($record->gradepass);
         }
 
-        $overallfeedback = $record->overallfeedback ?? null;
-        unset($record->overallfeedback);
+        $overallfeedbacks = $record->overallfeedbacks ?? null;
+        unset($record->overallfeedbacks);
 
         $instance = parent::create_instance($record, (array)$options);
 
-        if (!empty($overallfeedback)) {
-            $this->create_overall_feedback($instance->id, $instance->grade, $overallfeedback);
+        if (!empty($overallfeedbacks)) {
+            $this->add_overall_feedbacks($instance->id, $instance->grade, $overallfeedbacks);
         }
 
         return $instance;
     }
 
     /**
-     * Creates overall feedback entries for the quiz.
+     * Adds overall feedback entries for the quiz.
      *
      * @param int $quizid Quiz id.
      * @param float $quizgrade Quiz maximum grade.
-     * @param array $overallfeedback Feedback entries.
+     * @param array $overallfeedbacks Feedback entries. Each entry should contain:
+     *                                - mingrade: Lower boundary (grade points or percentage string like '50%'). Defaults to 0.
+     *                                - maxgrade: Upper boundary (grade points or percentage string). Defaults to quiz max grade.
+     *                                - feedbacktext: Feedback text.
+     *                                - feedbacktextformat: Text format (defaults to FORMAT_HTML).
      */
-    protected function create_overall_feedback(int $quizid, float $quizgrade, array $overallfeedback): void {
+    protected function add_overall_feedbacks(int $quizid, float $quizgrade, array $overallfeedbacks): void {
         global $DB;
 
-        foreach ($overallfeedback as $feedbackrow) {
+        foreach ($overallfeedbacks as $feedbackrow) {
             $feedbackrow = (array)$feedbackrow;
 
             $feedback = (object) [
