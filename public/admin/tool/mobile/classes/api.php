@@ -825,7 +825,7 @@ class api {
         $cache = \cache::make('tool_mobile', 'subscriptioninfo');
         $subscriptiondata = $cache->get(0);
 
-        // If we must force using cache, return it (or null if not present) and never contact the portal.
+        // If we must force using cache, return it (or null if not present) and never contact the portal..
         if ($forcecache) {
             return $subscriptiondata !== false ? $subscriptiondata : null;
         }

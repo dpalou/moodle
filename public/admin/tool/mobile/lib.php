@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Check whether the current or provided subscription data belongs to a Premium or BMA plan.
  *
- * If the provided data is missing or malformed, cached subscription information is requested.
+ * If the provided data is missing or malformed and $loadfromapi is true, cached subscription information is requested.
  *
  * @param ?array $subscriptiondata Optional subscription information returned by the Apps Portal API.
  * @param bool $loadfromapi Whether the function should request cached API data if the provided data is void or invalid.
