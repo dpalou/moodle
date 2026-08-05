@@ -47,15 +47,20 @@ final class lib_test extends \advanced_testcase {
         ]));
         $this->assertFalse(\tool_mobile_is_premium_or_bma_plan(null));
 
+        // If the provided data is void or invalid, the function should request cached API data.
         $cache = \cache::make('tool_mobile', 'subscriptioninfo');
         $cache->set(0, [
             'subscription' => ['plan' => ' Premium '],
         ]);
-
+        // According to the cache, the assertion will be true.
         $this->assertTrue(\tool_mobile_is_premium_or_bma_plan(null));
         $this->assertTrue(\tool_mobile_is_premium_or_bma_plan([
             'subscription' => ['plan' => 123],
         ]));
+        $this->assertFalse(\tool_mobile_is_premium_or_bma_plan([
+            'subscription' => ['plan' => 'free'],
+        ]));
+        $this->assertFalse(\tool_mobile_is_premium_or_bma_plan(null, false));
     }
 
     /**

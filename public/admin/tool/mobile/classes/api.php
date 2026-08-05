@@ -821,7 +821,7 @@ class api {
         require_once($CFG->libdir . '/filelib.php');
 
         $timeout = min(30, $timeout);
-        // Manage cache of the subscription information to avoid requesting it too often to the Moodle Apps Portal.
+        // Manage cache of the subscription information to avoid requesting it too often to the Moodle Apps Portal..
         $cache = \cache::make('tool_mobile', 'subscriptioninfo');
         $subscriptiondata = $cache->get(0);
 
